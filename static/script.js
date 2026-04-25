@@ -1,15 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
     const modeButtons = document.querySelectorAll(".mode-btn");
     const modeInput = document.getElementById("modeInput");
-
     const textPromptArea = document.getElementById("textPromptArea");
     const imagePromptArea = document.getElementById("imagePromptArea");
     const promptInput = document.getElementById("promptInput");
-
     const helpTitle = document.getElementById("helpTitle");
     const helpText = document.getElementById("helpText");
     const helpExample = document.getElementById("helpExample");
-
     const searchForm = document.getElementById("searchForm");
     const responseBox = document.getElementById("responseBox");
     const imageInput = document.getElementById("imageInput");
@@ -18,19 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const helpContent = {
         standard: {
-            title: "Mode Standard",
-            text: "Escriu quin tipus de viatge vols fer. Pots indicar origen, dates, durada, clima, activitats i pressupost aproximat.",
-            example: "Exemple: Vull marxar 5 dies des de Barcelona, amb natura, bon menjar i vols barats."
+            title: "Standard Mode",
+            text: "Describe the type of trip you would like to take. You can include origin, dates, duration, climate, activities and an estimated budget.",
+            example: "Example: I want to travel for 5 days from Barcelona, with nature, good food and affordable flights."
         },
         mood: {
-            title: "Mode Mood",
-            text: "Afegeix imatges que representin el mood del teu viatge. La IA podrà interpretar l’estil visual i proposar destins similars.",
-            example: "Exemple: puja una imatge de muntanya, una cafeteria acollidora i una ciutat amb llums de nit."
+            title: "Mood Mode",
+            text: "Upload images that represent the atmosphere of your ideal trip. The AI will interpret the visual style and suggest similar destinations.",
+            example: "Example: upload an image of mountains, a cosy café and a city with night lights."
         },
         budget: {
-            title: "Mode Pressupost",
-            text: "Escriu el teu pressupost total i què vols incloure: vols, hotel, menjar, transport o activitats.",
-            example: "Exemple: Tinc 1200€ per vol, hotel i menjar. Vull saber on puc anar i quants dies."
+            title: "Budget Mode",
+            text: "Enter your total budget and what you want to include, such as flights, accommodation, food, transport or activities.",
+            example: "Example: I have €1200 for flights, accommodation and food. Where can I go and for how many days?"
         }
     };
 
@@ -65,19 +62,21 @@ document.addEventListener("DOMContentLoaded", () => {
             promptInput.setAttribute("required", "required");
 
             selectedImages = [];
+
             if (imageInput) {
                 imageInput.value = "";
             }
 
             const preview = document.getElementById("imagePreview");
+
             if (preview) {
                 preview.innerHTML = "";
             }
 
             if (mode === "standard") {
-                promptInput.placeholder = "Ex: Vull fer un viatge de 5 dies amb natura i bon menjar des de Barcelona.";
+                promptInput.placeholder = "Example: I want a 5-day trip from Barcelona with nature and good food.";
             } else {
-                promptInput.placeholder = "Ex: Tinc 1200€ per vol, hotel i menjar. On puc anar?";
+                promptInput.placeholder = "Example: I have €1200 for flights, accommodation and food. Where can I go?";
             }
         }
     }
@@ -97,9 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderImagePreview() {
         const container = document.getElementById("imagePreview");
 
-        if (!container) {
-            return;
-        }
+        if (!container) return;
 
         container.innerHTML = "";
 
@@ -109,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const img = document.createElement("img");
             const url = URL.createObjectURL(file);
+
             img.src = url;
             img.onload = () => URL.revokeObjectURL(url);
 
@@ -130,12 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     searchForm.addEventListener("submit", () => {
         const currentMode = modeInput.value;
 
-        if (currentMode === "budget") {
-            searchForm.action = "/budget-results";
-        } else {
-            searchForm.action = "/search";
-        }
-
+        searchForm.action = currentMode === "budget" ? "/budget-results" : "/search";
         searchForm.method = "POST";
         searchForm.enctype = "multipart/form-data";
 
@@ -149,4 +142,80 @@ document.addEventListener("DOMContentLoaded", () => {
             imageInput.files = dataTransfer.files;
         }
     });
+
+    function getCart() {
+        return JSON.parse(sessionStorage.getItem("travelCart")) || [];
+    }
+
+    function renderCart() {
+        const cart = getCart();
+        const cartItems = document.getElementById("cartItems");
+        const cartTotal = document.getElementById("cartTotal");
+
+        if (!cartItems || !cartTotal) return;
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = "<p>Your basket is empty.</p>";
+            cartTotal.textContent = "Total: €0";
+            return;
+        }
+
+        let total = 0;
+
+        cartItems.innerHTML = cart.map((trip, index) => {
+            total += trip.total;
+
+            return `
+                <div class="cart-item">
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        gap:10px;
+                    ">
+                        <strong>${trip.city}, ${trip.country}</strong>
+
+                        <button
+                            onclick="removeCartItem(${index})"
+                            style="
+                                border:none;
+                                background:#ef4444;
+                                color:white;
+                                width:24px;
+                                height:24px;
+                                border-radius:50%;
+                                cursor:pointer;
+                                font-weight:bold;
+                                font-size:14px;
+                            "
+                        >
+                            ×
+                        </button>
+                    </div>
+
+                    <ul>
+                        ${trip.items.map(item => `
+                            <li>${item.name} — €${item.price}</li>
+                        `).join("")}
+                    </ul>
+
+                    <p><strong>€${trip.total}</strong></p>
+                </div>
+            `;
+        }).join("");
+
+        cartTotal.textContent = "Total: €" + total;
+    }
+
+    window.removeCartItem = function(index) {
+        const cart = getCart();
+
+        cart.splice(index, 1);
+
+        sessionStorage.setItem("travelCart", JSON.stringify(cart));
+
+        renderCart();
+    };
+
+    renderCart();
 });

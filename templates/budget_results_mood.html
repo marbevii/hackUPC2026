@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vols Disponibles - Mood</title>
+    <title>Available Flights - Mood</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='budget.css') }}">
 
@@ -71,7 +71,7 @@
 <header class="banner">
     <div class="banner-left">
         <div class="logo">LOGO</div>
-        <h1>Nom Web</h1>
+        <h1>Travel AI</h1>
     </div>
 
     <div class="banner-right">
@@ -79,13 +79,13 @@
             <button type="button" class="icon-btn cart-btn">🛒</button>
 
             <div class="cart-preview" id="cartPreview">
-                <h4>Cistella</h4>
+                <h4>Basket</h4>
 
                 <div id="cartItems">
-                    <p>Encara no has afegit res.</p>
+                    <p>Your basket is empty.</p>
                 </div>
 
-                <strong id="cartTotal">Total: 0€</strong>
+                <strong id="cartTotal">Total: €0</strong>
             </div>
         </div>
 
@@ -110,7 +110,7 @@
 
             <div class="country-options-grid">
                 <div class="section-block">
-                    <h3>✈️ Vols disponibles</h3>
+                    <h3>✈️ Available Flights</h3>
 
                     {% for item in country.flights %}
                     <label class="option-row">
@@ -131,7 +131,7 @@
                             </span>
                         </div>
 
-                        <strong>{{ item.price }}€</strong>
+                        <strong>€{{ item.price }}</strong>
                     </label>
                     {% endfor %}
 
@@ -145,7 +145,7 @@
                 data-city="{{ country.city }}"
                 data-country-name="{{ country.country }}"
             >
-                Add to basket !
+                Add to basket
             </button>
 
         </article>
@@ -174,30 +174,63 @@ function renderCart() {
     if (!cartItems || !cartTotal) return;
 
     if (cart.length === 0) {
-        cartItems.innerHTML = "<p>Encara no has afegit res.</p>";
-        cartTotal.textContent = "Total: 0€";
+        cartItems.innerHTML = "<p>Your basket is empty.</p>";
+        cartTotal.textContent = "Total: €0";
         return;
     }
 
     let total = 0;
 
-    cartItems.innerHTML = cart.map(trip => {
+    cartItems.innerHTML = cart.map((trip, index) => {
         total += trip.total;
 
         return `
             <div class="cart-item">
-                <strong>${trip.city}, ${trip.country}</strong>
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:10px;
+                ">
+                    <strong>${trip.city}, ${trip.country}</strong>
+
+                    <button
+                        onclick="removeCartItem(${index})"
+                        style="
+                            border:none;
+                            background:#ef4444;
+                            color:white;
+                            width:24px;
+                            height:24px;
+                            border-radius:50%;
+                            cursor:pointer;
+                            font-weight:bold;
+                            font-size:14px;
+                        "
+                    >
+                        ×
+                    </button>
+                </div>
+
                 <ul>
                     ${trip.items.map(item => `
-                        <li>${item.name} — ${item.price}€</li>
+                        <li>${item.name} — €${item.price}</li>
                     `).join("")}
                 </ul>
-                <p><strong>${trip.total}€</strong></p>
+
+                <p><strong>€${trip.total}</strong></p>
             </div>
         `;
     }).join("");
 
-    cartTotal.textContent = "Total: " + total + "€";
+    cartTotal.textContent = "Total: €" + total;
+}
+
+function removeCartItem(index) {
+    const cart = getCart();
+    cart.splice(index, 1);
+    sessionStorage.setItem("travelCart", JSON.stringify(cart));
+    renderCart();
 }
 
 function getSelectedFlight(countryId) {
@@ -205,9 +238,7 @@ function getSelectedFlight(countryId) {
         'input[data-country="' + countryId + '"]:checked'
     );
 
-    if (!input) {
-        return null;
-    }
+    if (!input) return null;
 
     const row = input.closest(".option-row");
     const name = row.querySelector("span").innerText.trim();
@@ -233,7 +264,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         const selection = getSelectedFlight(countryId);
 
         if (!selection) {
-            alert("Selecciona un vol abans d’afegir-ho al carret.");
+            alert("Please select a flight before adding it to your basket.");
             return;
         }
 
@@ -249,7 +280,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         saveCart(cart);
         renderCart();
 
-        alert("Vol afegit al carret!");
+        alert("Flight added to your basket.");
     });
 });
 

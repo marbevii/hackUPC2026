@@ -1,5 +1,3 @@
-# services/skyscanner_service.py
-
 import os
 import time
 import requests
@@ -24,7 +22,7 @@ def search_flights(origin_iata, destination_iata, date, adults=1):
     print("Date:", date)
 
     if not SKYSCANNER_API_KEY:
-        print("No SKYSCANNER_API_KEY found.")
+        print("SKYSCANNER_API_KEY was not found.")
         return get_mock_flights(destination_iata)
 
     headers = {
@@ -35,7 +33,7 @@ def search_flights(origin_iata, destination_iata, date, adults=1):
     payload = {
         "query": {
             "market": "ES",
-            "locale": "es-ES",
+            "locale": "en-GB",
             "currency": "EUR",
             "queryLegs": [
                 {
@@ -68,7 +66,7 @@ def search_flights(origin_iata, destination_iata, date, adults=1):
         session_token = create_data.get("sessionToken")
 
         if not session_token:
-            print("No sessionToken.")
+            print("No session token returned.")
             print("CREATE DATA:", create_data)
             return get_mock_flights(destination_iata)
 
@@ -194,7 +192,7 @@ def parse_flights(data):
             continue
 
         leg_ids = itinerary.get("legIds", [])
-        airline_name = "Companyia"
+        airline_name = "Airline"
         departure_time = ""
 
         if leg_ids:
@@ -219,7 +217,7 @@ def parse_flights(data):
                     carrier.get("name")
                     or carrier.get("displayCode")
                     or carrier.get("iata")
-                    or "Companyia"
+                    or "Airline"
                 )
 
         label = airline_name

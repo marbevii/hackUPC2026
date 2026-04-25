@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from flask import Flask, render_template, request
+
 from services.ai_service import get_budget_destinations, get_destination_from_mood
 from services.skyscanner_service import search_flights, search_flights_date_range
-from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "hackupc_secret_key"
@@ -25,6 +27,7 @@ def get_mock_hotels(index):
             {"name": "Panorama Design Rooms", "price": 118, "address": "Hilltop Avenue"},
         ],
     ]
+
     return options[index % len(options)]
 
 
@@ -46,6 +49,7 @@ def get_mock_restaurants(index):
             {"name": "Night Garden Restaurant", "price": 44, "address": "Garden Walk"},
         ],
     ]
+
     return options[index % len(options)]
 
 
@@ -67,6 +71,7 @@ def get_mock_extras(index):
             {"name": "Lake Region Day Trip", "price": 67, "address": "East Station"},
         ],
     ]
+
     return options[index % len(options)]
 
 
@@ -166,7 +171,7 @@ def search():
     if mode == "mood":
         images = request.files.getlist("images")
         ai_data = get_destination_from_mood(images)
-        prompt_used = "Anàlisi de Mood Visual"
+        prompt_used = "Visual mood analysis"
         template_to_use = "budget_results_mood.html"
         use_date_range = False
     else:
@@ -182,20 +187,17 @@ def search():
     budget = ai_data.get("budget", 999999)
     origin = ai_data.get("origin", "BCN")
     adults = ai_data.get("adult_count", 1)
-
     candidates = ai_data.get("candidate_destinations", ai_data.get("destinations", []))
+
     countries = []
 
     for destination in candidates:
         country_index = len(countries)
-
         city_name = destination.get("city")
         iata_code = destination.get("iata")
 
         if not city_name or not iata_code:
             continue
-
-        flights = []
 
         try:
             if use_date_range:
@@ -214,7 +216,7 @@ def search():
                     adults
                 )
         except Exception as e:
-            print(f"Error en cercar vols per a {city_name}: {e}")
+            print(f"Flight search error for {city_name}: {e}")
             flights = []
 
         if not flights:
@@ -242,7 +244,7 @@ def search():
         country_data = {
             "country": destination.get("country", ""),
             "city": city_name,
-            "reason": destination.get("reason", "Destí ideal segons el teu mood."),
+            "reason": destination.get("reason", "Recommended destination based on your preferences."),
             "flights": valid_flights,
         }
 

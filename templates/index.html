@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,13 +20,13 @@
             <button type="button" class="icon-btn cart-btn">🛒</button>
 
             <div class="cart-preview" id="cartPreview">
-                <h4>Cistella</h4>
+                <h4>Basket</h4>
 
                 <div id="cartItems">
-                    <p>Encara no has afegit res.</p>
+                    <p>Your basket is empty.</p>
                 </div>
 
-                <strong id="cartTotal">Total: 0€</strong>
+                <strong id="cartTotal">Total: €0</strong>
             </div>
         </div>
 
@@ -39,31 +39,17 @@
     <section class="search-container">
 
         <div class="mode-buttons">
-
-            <button
-                type="button"
-                class="mode-btn active"
-                data-mode="standard"
-            >
+            <button type="button" class="mode-btn active" data-mode="standard">
                 Standard
             </button>
 
-            <button
-                type="button"
-                class="mode-btn"
-                data-mode="mood"
-            >
+            <button type="button" class="mode-btn" data-mode="mood">
                 Mood
             </button>
 
-            <button
-                type="button"
-                class="mode-btn"
-                data-mode="budget"
-            >
-                Pressupost
+            <button type="button" class="mode-btn" data-mode="budget">
+                Budget
             </button>
-
         </div>
 
         <form
@@ -72,43 +58,28 @@
             action="/search"
             method="POST"
             enctype="multipart/form-data"
-            target="_blank"
         >
-
-            <input
-                type="hidden"
-                name="mode"
-                id="modeInput"
-                value="standard"
-            >
+            <input type="hidden" name="mode" id="modeInput" value="standard">
 
             <div id="textPromptArea">
                 <textarea
                     name="prompt"
                     id="promptInput"
-                    placeholder="Escriu aquí el teu prompt..."
+                    placeholder="Write your travel request here..."
                 ></textarea>
             </div>
 
-            <div
-                id="imagePromptArea"
-                class="hidden"
-            >
-
-                <div
-                    id="imagePreview"
-                    class="image-preview-container"
-                ></div>
+            <div id="imagePromptArea" class="hidden">
+                <div id="imagePreview" class="image-preview-container"></div>
 
                 <label class="image-upload-box">
-
                     <span class="upload-icon">＋</span>
 
-                    <p>Afegeix imatges del teu mood</p>
+                    <p>Add images that reflect your travel mood</p>
 
                     <small>
-                        Pots pujar fotos de paisatges,
-                        ciutats, cafès, platges...
+                        You can upload photos of landscapes, cities,
+                        cafés, beaches or any visual inspiration.
                     </small>
 
                     <input
@@ -118,48 +89,30 @@
                         multiple
                         accept="image/*"
                     >
-
                 </label>
-
             </div>
 
-            <button
-                type="submit"
-                class="submit-btn"
-            >
-                Buscar / Analitzar
+            <button type="submit" class="submit-btn">
+                Search / Analyse
             </button>
-
         </form>
 
         <section class="explanation-box">
-
-            <h2 id="helpTitle">
-                Mode Standard
-            </h2>
+            <h2 id="helpTitle">Standard Mode</h2>
 
             <p id="helpText">
-                Escriu quin tipus de viatge vols fer.
-                Pots indicar origen, dates, durada,
-                estil de viatge, clima, activitats
-                i pressupost aproximat.
+                Describe the type of trip you would like to take.
+                You can include origin, dates, duration, travel style,
+                climate, activities and an estimated budget.
             </p>
 
-            <p
-                id="helpExample"
-                class="example"
-            >
-                Exemple: Vull marxar 5 dies
-                des de Barcelona, amb natura,
-                bon menjar i vols barats.
+            <p id="helpExample" class="example">
+                Example: I want to travel for 5 days from Barcelona,
+                with nature, good food and affordable flights.
             </p>
-
         </section>
 
-        <section
-            id="responseBox"
-            class="response-box hidden"
-        ></section>
+        <section id="responseBox" class="response-box hidden"></section>
 
     </section>
 

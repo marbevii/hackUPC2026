@@ -9,10 +9,6 @@ body {
     color: #111827;
 }
 
-/* =========================
-   HEADER
-========================= */
-
 .banner {
     position: fixed;
     top: 0;
@@ -73,10 +69,6 @@ body {
     background: #eeeeee;
 }
 
-/* =========================
-   HOME
-========================= */
-
 .main-content {
     padding-top: 130px;
     min-height: 100vh;
@@ -89,8 +81,6 @@ body {
     max-width: 850px;
     padding: 24px;
 }
-
-/* Modes */
 
 .mode-buttons {
     display: flex;
@@ -124,8 +114,6 @@ body {
     background: #111827;
 }
 
-/* Prompt */
-
 .prompt-box {
     background: white;
     border: 1px solid #d7d7d7;
@@ -148,10 +136,6 @@ textarea {
 textarea:focus {
     border-color: #111827;
 }
-
-/* =========================
-   MOOD IMAGE UPLOAD
-========================= */
 
 .image-upload-box {
     display: block;
@@ -231,10 +215,6 @@ textarea:focus {
     transform: scale(1.08);
 }
 
-/* =========================
-   BUTTON
-========================= */
-
 .submit-btn {
     width: 100%;
     margin-top: 22px;
@@ -252,10 +232,6 @@ textarea:focus {
 .submit-btn:hover {
     background: #252f3f;
 }
-
-/* =========================
-   INFO BOX
-========================= */
 
 .explanation-box {
     margin-top: 30px;
@@ -287,10 +263,6 @@ textarea:focus {
     border: 1px solid #d7d7d7;
     border-radius: 20px;
 }
-
-/* =========================
-   RESULTS PAGE
-========================= */
 
 .results-page {
     overflow: hidden;
@@ -372,22 +344,14 @@ textarea:focus {
     background: #f4f5f7;
 }
 
-/* =========================
-   HELPERS
-========================= */
-
 .hidden {
     display: none;
-}
-
-.cart-wrapper {
-    position: relative;
 }
 
 .cart-preview {
     display: none;
     position: absolute;
-    top: 58px;
+    top: 46px;
     right: 0;
     width: 320px;
     max-height: 420px;
@@ -400,7 +364,8 @@ textarea:focus {
     z-index: 2000;
 }
 
-.cart-wrapper:hover .cart-preview {
+.cart-wrapper:hover .cart-preview,
+.cart-preview:hover {
     display: block;
 }
 
@@ -424,37 +389,6 @@ textarea:focus {
     color: #4b5563;
     margin-bottom: 4px;
 }
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 768px) {
-    .banner {
-        padding: 0 16px;
-    }
-
-    .banner-left h1 {
-        font-size: 18px;
-    }
-
-    .mode-buttons {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .results-container {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .chat-sidebar,
-    .flights-display {
-        width: 100%;
-    }
-}
-
-/* Botó Home Flotant */
 
 .home-fab {
     position: fixed;
@@ -481,4 +415,29 @@ textarea:focus {
 .home-icon {
     font-size: 28px;
     color: #000000;
+}
+
+@media (max-width: 768px) {
+    .banner {
+        padding: 0 16px;
+    }
+
+    .banner-left h1 {
+        font-size: 18px;
+    }
+
+    .mode-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .results-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .chat-sidebar,
+    .flights-display {
+        width: 100%;
+    }
 }

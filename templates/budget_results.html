@@ -1,8 +1,9 @@
+```html
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Resultats Pressupost</title>
+    <title>Budget Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='budget.css') }}">
 </head>
@@ -12,7 +13,7 @@
 <header class="banner">
     <div class="banner-left">
         <div class="logo">LOGO</div>
-        <h1>Nom Web</h1>
+        <h1>Travel AI</h1>
     </div>
 
     <div class="banner-right">
@@ -20,13 +21,13 @@
             <button type="button" class="icon-btn cart-btn">🛒</button>
 
             <div class="cart-preview" id="cartPreview">
-                <h4>Cistella</h4>
+                <h4>Basket</h4>
 
                 <div id="cartItems">
-                    <p>Encara no has afegit res.</p>
+                    <p>Your basket is empty.</p>
                 </div>
 
-                <strong id="cartTotal">Total: 0€</strong>
+                <strong id="cartTotal">Total: €0</strong>
             </div>
         </div>
 
@@ -37,13 +38,13 @@
 <main class="budget-page">
 
     <section class="prompt-section">
-        <h2>El teu prompt</h2>
+        <h2>Your request</h2>
 
         <div class="prompt-box-top">
             <p>{{ prompt }}</p>
 
             <small class="prompt-date">
-                📅 Sortida estimada:
+                📅 Estimated departure:
                 {{ travel_date.day }}/{{ travel_date.month }}/{{ travel_date.year }}
             </small>
         </div>
@@ -73,7 +74,7 @@
             <div class="country-options-grid">
 
                 <div class="section-block">
-                    <h3>✈️ Vols</h3>
+                    <h3>✈️ Flights</h3>
 
                     {% for item in country.flights %}
                     <label class="option-row">
@@ -94,13 +95,13 @@
                             {% endif %}
                         </span>
 
-                        <strong>{{ item.price }}€</strong>
+                        <strong>€{{ item.price }}</strong>
                     </label>
                     {% endfor %}
                 </div>
 
                 <div class="section-block">
-                    <h3>🏨 Allotjament</h3>
+                    <h3>🏨 Accommodation</h3>
 
                     {% for item in country.hotels %}
                     <label class="option-row">
@@ -121,13 +122,13 @@
                             {% endif %}
                         </span>
 
-                        <strong>{{ item.price }}€/nit</strong>
+                        <strong>€{{ item.price }}/night</strong>
                     </label>
                     {% endfor %}
                 </div>
 
                 <div class="section-block">
-                    <h3>🍽️ Menjar</h3>
+                    <h3>🍽️ Food</h3>
 
                     {% for item in country.food %}
                     <label class="option-row">
@@ -148,13 +149,13 @@
                             {% endif %}
                         </span>
 
-                        <strong>{{ item.price }}€</strong>
+                        <strong>€{{ item.price }}</strong>
                     </label>
                     {% endfor %}
                 </div>
 
                 <div class="section-block">
-                    <h3>🎟️ Extres</h3>
+                    <h3>🎟️ Extras</h3>
 
                     {% for item in country.extras %}
                     <label class="option-row">
@@ -174,7 +175,7 @@
                             {% endif %}
                         </span>
 
-                        <strong>{{ item.price }}€</strong>
+                        <strong>€{{ item.price }}</strong>
                     </label>
                     {% endfor %}
                 </div>
@@ -182,7 +183,7 @@
             </div>
 
             <div class="total-box">
-                Total: <span id="total-{{ country_index }}">0</span>€
+                Total: €<span id="total-{{ country_index }}">0</span>
             </div>
 
             <button
@@ -192,7 +193,7 @@
                 data-city="{{ country.city }}"
                 data-country-name="{{ country.country }}"
             >
-                Add to basket !
+                Add to basket
             </button>
 
         </article>
@@ -262,30 +263,63 @@ function renderCart() {
     if (!cartItems || !cartTotal) return;
 
     if (cart.length === 0) {
-        cartItems.innerHTML = "<p>Encara no has afegit res.</p>";
-        cartTotal.textContent = "Total: 0€";
+        cartItems.innerHTML = "<p>Your basket is empty.</p>";
+        cartTotal.textContent = "Total: €0";
         return;
     }
 
     let total = 0;
 
-    cartItems.innerHTML = cart.map(trip => {
+    cartItems.innerHTML = cart.map((trip, index) => {
         total += trip.total;
 
         return `
             <div class="cart-item">
-                <strong>${trip.city}, ${trip.country}</strong>
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:10px;
+                ">
+                    <strong>${trip.city}, ${trip.country}</strong>
+
+                    <button
+                        onclick="removeCartItem(${index})"
+                        style="
+                            border:none;
+                            background:#ef4444;
+                            color:white;
+                            width:24px;
+                            height:24px;
+                            border-radius:50%;
+                            cursor:pointer;
+                            font-weight:bold;
+                            font-size:14px;
+                        "
+                    >
+                        ×
+                    </button>
+                </div>
+
                 <ul>
                     ${trip.items.map(item => `
-                        <li>${item.name} — ${item.price}€</li>
+                        <li>${item.name} — €${item.price}</li>
                     `).join("")}
                 </ul>
-                <p><strong>${trip.total}€</strong></p>
+
+                <p><strong>€${trip.total}</strong></p>
             </div>
         `;
     }).join("");
 
-    cartTotal.textContent = "Total: " + total + "€";
+    cartTotal.textContent = "Total: €" + total;
+}
+
+function removeCartItem(index) {
+    const cart = getCart();
+    cart.splice(index, 1);
+    sessionStorage.setItem("travelCart", JSON.stringify(cart));
+    renderCart();
 }
 
 document.querySelectorAll("input[data-country]").forEach(input => {
@@ -303,7 +337,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         const selection = getSelectedOptions(countryId);
 
         if (selection.items.length === 0) {
-            alert("Selecciona com a mínim una opció abans d'afegir-ho al carret.");
+            alert("Please select at least one option before adding it to your basket.");
             return;
         }
 
@@ -319,7 +353,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         saveCart(cart);
         renderCart();
 
-        alert("Combinació afegida al carret!");
+        alert("Selection added to your basket.");
     });
 });
 
@@ -330,3 +364,4 @@ renderCart();
 
 </body>
 </html>
+```

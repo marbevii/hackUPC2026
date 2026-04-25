@@ -1,9 +1,10 @@
+```html
 <style>
     .floating-home-container {
         position: fixed;
         bottom: 30px;
         left: 30px;
-        z-index: 2147483647; /* El máximo posible para que no lo tape nada */
+        z-index: 2147483647;
     }
 
     .home-circle {
@@ -12,7 +13,7 @@
         justify-content: center;
         width: 60px;
         height: 60px;
-        background-color: #FFFFFF !important;
+        background-color: #ffffff !important;
         border-radius: 50%;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         text-decoration: none;
@@ -27,12 +28,12 @@
     .home-icon {
         width: 30px;
         height: 30px;
-        fill: #000000; /* Casa negra */
+        fill: #000000;
     }
 </style>
 
 <div class="floating-home-container">
-    <a href="/" class="home-circle">
+    <a href="/" class="home-circle" aria-label="Go to homepage">
         <svg class="home-icon" viewBox="0 0 24 24">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
         </svg>

@@ -1,5 +1,3 @@
-# services/ai_service.py
-
 import os
 import json
 from dotenv import load_dotenv
@@ -11,36 +9,34 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 def get_budget_destinations(user_prompt):
-    """
-    Analitza el prompt de text i retorna destinacions candidates.
-    Compatible amb pressupost, origen, dates i preferències.
-    """
     if not GEMINI_API_KEY:
-        print("⚠️ Falta GEMINI_API_KEY al fitxer .env")
-        return _get_fallback_data("No hi ha API Key configurada.")
+        print("GEMINI_API_KEY is missing from the .env file.")
+        return _get_fallback_data("No API key configured.")
 
     client = genai.Client(api_key=GEMINI_API_KEY)
 
     prompt = f"""
-Ets un motor d'intenció de viatges.
+You are a travel intent engine.
 
-Objectiu:
-Interpretar el prompt de l'usuari i retornar ciutats candidates per buscar vols amb Skyscanner.
+Objective:
+Interpret the user's request and return candidate cities to search flights with Skyscanner.
 
-Regles:
-- Retorna NOMÉS JSON vàlid.
-- Extreu el pressupost numèric si existeix.
-- Si diu "fora d'Europa", NO proposis ciutats europees.
-- Si diu "sense platja", NO proposis destinacions de platja.
-- Si diu "ciutat", prioritza grans ciutats urbanes.
-- Si diu cultura, menjar, festa, natura, relax, etc., adapta les ciutats.
-- Si no diu origen, assumeix BCN.
-- Retorna entre 8 i 10 candidates.
-- Si NO diu data, NO inventis cap data: posa "date_was_provided": false i "query_dates": null.
-- Si SÍ diu data, mes o període, posa "date_was_provided": true i omple "query_dates".
-- Cada ciutat necessita city, country, iata i reason.
-- Afegeix "date_was_provided": true només si l'usuari ha escrit una data, mes o període.
-- Si l'usuari NO escriu cap data, posa "date_was_provided": false i "query_dates": null.
+Rules:
+- Return ONLY valid JSON.
+- Extract the numeric budget if provided.
+- If the user says "outside Europe", do NOT suggest European cities.
+- If the user says "no beach", do NOT suggest beach destinations.
+- If the user says "city", prioritize major urban destinations.
+- If the user mentions culture, food, nightlife, nature, relaxation, etc., adapt suggestions accordingly.
+- If no origin is provided, assume BCN.
+- Return between 8 and 10 candidates.
+- If NO date is provided, do NOT invent one:
+  set "date_was_provided": false
+  and "query_dates": null.
+- If a date, month or period IS provided:
+  set "date_was_provided": true
+  and fill "query_dates".
+- Each city must include city, country, iata and reason.
 
 Format:
 {{
@@ -54,12 +50,12 @@ Format:
       "city": "Marrakech",
       "country": "Morocco",
       "iata": "RAK",
-      "reason": "Ciutat fora d'Europa, cultural, sense platja i assequible."
+      "reason": "Affordable cultural city outside Europe with no beach."
     }}
   ]
 }}
 
-Prompt usuari:
+User prompt:
 {user_prompt}
 """
 
@@ -72,42 +68,35 @@ Prompt usuari:
         text = response.text.strip()
         text = text.replace("```json", "").replace("```", "").strip()
 
-        print("GEMINI RAW RESPONSE:")
+        print("MODEL RAW RESPONSE:")
         print(text)
 
         return json.loads(text)
 
     except Exception as e:
-        print(f"⚠️ Error Gemini/Gemma Text: {e}")
-        return _get_fallback_data(f"Error en la consulta: {str(e)}")
+        print(f"Model request error: {e}")
+        return _get_fallback_data(f"Request error: {str(e)}")
 
 
 def get_destination_from_mood(image_files):
-    """
-    Mode mood visual.
-
-    Per demo:
-    - Si hi ha exactament 2 imatges, retorna Amsterdam.
-    - En qualsevol altre cas, retorna Bali.
-    """
     num_images = len(image_files)
-    print(f"DEBUG - Imatges rebudes: {num_images}")
+    print(f"DEBUG - Images received: {num_images}")
 
     if num_images == 2:
         dest_city = "Amsterdam"
-        dest_country = "Països Baixos"
+        dest_country = "Netherlands"
         dest_iata = "AMS"
         dest_reason = (
-            "El mood urbà i cultural de les teves fotos encaixa amb els canals "
-            "i l'estil d'Amsterdam."
+            "The urban and cultural atmosphere of your images matches "
+            "the canals and lifestyle of Amsterdam."
         )
     else:
         dest_city = "Bali"
-        dest_country = "Indonèsia"
+        dest_country = "Indonesia"
         dest_iata = "DPS"
         dest_reason = (
-            "El mood de les teves fotos encaixa perfectament amb l'estètica "
-            "tropical de Bali."
+            "The visual mood of your images aligns perfectly with "
+            "the tropical atmosphere of Bali."
         )
 
     return {
@@ -140,9 +129,6 @@ def get_destination_from_mood(image_files):
 
 
 def _get_fallback_data(reason):
-    """
-    Dades de seguretat per evitar que l'app falli si la IA dona error.
-    """
     return {
         "origin": "BCN",
         "budget": 999999,
