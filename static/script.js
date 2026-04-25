@@ -98,13 +98,3 @@ searchForm.addEventListener("submit", async (event) => {
     `;
 });
 
-searchForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const prompt = document.getElementById("promptInput").value;
-    
-    // Guardem el prompt temporalment per mostrar-lo al xat de la següent pàgina
-    localStorage.setItem('lastPrompt', prompt);
-    
-    // Redirigim a la pàgina de resultats
-    window.location.href = "/results";
-});
