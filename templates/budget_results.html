@@ -21,13 +21,16 @@
 
             <div class="cart-preview" id="cartPreview">
                 <h4>Cistella</h4>
+
                 <div id="cartItems">
                     <p>Encara no has afegit res.</p>
                 </div>
+
                 <strong id="cartTotal">Total: 0€</strong>
             </div>
         </div>
-        <button class="icon-btn">☰</button>
+
+        <button type="button" class="icon-btn">☰</button>
     </div>
 </header>
 
@@ -43,7 +46,6 @@
                 📅 Sortida estimada:
                 {{ travel_date.day }}/{{ travel_date.month }}/{{ travel_date.year }}
             </small>
-
         </div>
     </section>
 
@@ -72,18 +74,26 @@
 
                 <div class="section-block">
                     <h3>✈️ Vols</h3>
+
                     {% for item in country.flights %}
                     <label class="option-row">
-                        <input type="radio"
-                               name="flight-{{ country_index }}"
-                               data-country="{{ country_index }}"
-                               data-price="{{ item.price }}">
+                        <input
+                            type="radio"
+                            name="flight-{{ country_index }}"
+                            data-country="{{ country_index }}"
+                            data-price="{{ item.price }}"
+                        >
+
                         <span>
-                            {{ item.name }}
+                            {{ item.name or item.airline }}
+
                             {% if item.date %}
-                                <small class="flight-date"> · {{ item.date }}</small>
+                                <small class="flight-date">
+                                    · {{ item.date }}
+                                </small>
                             {% endif %}
                         </span>
+
                         <strong>{{ item.price }}€</strong>
                     </label>
                     {% endfor %}
@@ -91,18 +101,26 @@
 
                 <div class="section-block">
                     <h3>🏨 Allotjament</h3>
+
                     {% for item in country.hotels %}
                     <label class="option-row">
-                        <input type="radio"
-                               name="hotel-{{ country_index }}"
-                               data-country="{{ country_index }}"
-                               data-price="{{ item.price }}">
+                        <input
+                            type="radio"
+                            name="hotel-{{ country_index }}"
+                            data-country="{{ country_index }}"
+                            data-price="{{ item.price }}"
+                        >
+
                         <span>
                             {{ item.name }}
+
                             {% if item.address %}
-                                <small class="flight-date"> · {{ item.address }}</small>
+                                <small class="flight-date">
+                                    · {{ item.address }}
+                                </small>
                             {% endif %}
                         </span>
+
                         <strong>{{ item.price }}€/nit</strong>
                     </label>
                     {% endfor %}
@@ -110,18 +128,26 @@
 
                 <div class="section-block">
                     <h3>🍽️ Menjar</h3>
+
                     {% for item in country.food %}
                     <label class="option-row">
-                        <input type="radio"
-                               name="food-{{ country_index }}"
-                               data-country="{{ country_index }}"
-                               data-price="{{ item.price }}">
+                        <input
+                            type="radio"
+                            name="food-{{ country_index }}"
+                            data-country="{{ country_index }}"
+                            data-price="{{ item.price }}"
+                        >
+
                         <span>
                             {{ item.name }}
+
                             {% if item.address %}
-                                <small class="flight-date"> · {{ item.address }}</small>
+                                <small class="flight-date">
+                                    · {{ item.address }}
+                                </small>
                             {% endif %}
                         </span>
+
                         <strong>{{ item.price }}€</strong>
                     </label>
                     {% endfor %}
@@ -129,17 +155,25 @@
 
                 <div class="section-block">
                     <h3>🎟️ Extres</h3>
+
                     {% for item in country.extras %}
                     <label class="option-row">
-                        <input type="checkbox"
-                               data-country="{{ country_index }}"
-                               data-price="{{ item.price }}">
+                        <input
+                            type="checkbox"
+                            data-country="{{ country_index }}"
+                            data-price="{{ item.price }}"
+                        >
+
                         <span>
                             {{ item.name }}
+
                             {% if item.address %}
-                                <small class="flight-date"> · {{ item.address }}</small>
+                                <small class="flight-date">
+                                    · {{ item.address }}
+                                </small>
                             {% endif %}
                         </span>
+
                         <strong>{{ item.price }}€</strong>
                     </label>
                     {% endfor %}
@@ -152,6 +186,7 @@
             </div>
 
             <button
+                type="button"
                 class="combo-btn add-to-cart-btn"
                 data-country="{{ country_index }}"
                 data-city="{{ country.city }}"
@@ -161,6 +196,7 @@
             </button>
 
         </article>
+
         {% endfor %}
 
     </section>
@@ -179,7 +215,11 @@ function updateTotal(countryId) {
         total += Number(el.dataset.price);
     });
 
-    document.getElementById("total-" + countryId).textContent = total;
+    const totalBox = document.getElementById("total-" + countryId);
+
+    if (totalBox) {
+        totalBox.textContent = total;
+    }
 }
 
 function getSelectedOptions(countryId) {
@@ -230,7 +270,7 @@ function renderCart() {
     let total = 0;
 
     cartItems.innerHTML = cart.map(trip => {
-    total += trip.total;
+        total += trip.total;
 
         return `
             <div class="cart-item">
@@ -249,13 +289,13 @@ function renderCart() {
 }
 
 document.querySelectorAll("input[data-country]").forEach(input => {
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
         updateTotal(this.dataset.country);
     });
 });
 
 document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
         const countryId = this.dataset.country;
         const city = this.dataset.city;
         const country = this.dataset.countryName;
@@ -285,6 +325,8 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 
 renderCart();
 </script>
+
+{% include 'home_button.html' ignore missing %}
 
 </body>
 </html>

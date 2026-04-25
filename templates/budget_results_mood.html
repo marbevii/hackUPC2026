@@ -5,14 +5,14 @@
     <title>Vols Disponibles - Mood</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='budget.css') }}">
+
     <style>
-        /* Estils específics per netejar la interfície */
         .prompt-section {
-            display: none !important; /* Elimina la secció del prompt/demo de dalt */
+            display: none !important;
         }
 
         .country-options-grid {
-            display: block !important; /* Passem de graella a bloc únic */
+            display: block !important;
             margin-top: 20px;
         }
 
@@ -22,7 +22,6 @@
             padding: 0 !important;
         }
 
-        /* Amaguem les seccions que no siguin vols */
         .section-block:not(:first-child) {
             display: none !important;
         }
@@ -76,19 +75,21 @@
     </div>
 
     <div class="banner-right">
-    <div class="cart-wrapper">
-        <button type="button" class="icon-btn cart-btn">🛒</button>
+        <div class="cart-wrapper">
+            <button type="button" class="icon-btn cart-btn">🛒</button>
 
-        <div class="cart-preview" id="cartPreview">
-            <h4>Cistella</h4>
-            <div id="cartItems">
-                <p>Encara no has afegit res.</p>
-            </div>
+            <div class="cart-preview" id="cartPreview">
+                <h4>Cistella</h4>
+
+                <div id="cartItems">
+                    <p>Encara no has afegit res.</p>
+                </div>
+
                 <strong id="cartTotal">Total: 0€</strong>
             </div>
         </div>
 
-        <button class="icon-btn">☰</button>
+        <button type="button" class="icon-btn">☰</button>
     </div>
 </header>
 
@@ -98,6 +99,7 @@
 
         {% for country in countries %}
         {% set country_index = loop.index0 %}
+
         <article class="country-card">
 
             <div class="country-header">
@@ -109,19 +111,30 @@
             <div class="country-options-grid">
                 <div class="section-block">
                     <h3>✈️ Vols disponibles</h3>
+
                     {% for item in country.flights %}
                     <label class="option-row">
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <input type="radio"
+                            <input
+                                type="radio"
                                 name="flight-{{ country_index }}"
                                 data-country="{{ country_index }}"
                                 data-price="{{ item.price }}"
-                                {% if loop.first %}checked{% endif %}>                            
-                            <span>{{ item.airline if item.airline else item.name }}</span>
+                                {% if loop.first %}checked{% endif %}
+                            >
+
+                            <span>
+                                {{ item.airline if item.airline else item.name }}
+                                {% if item.date %}
+                                    <small class="flight-date"> · {{ item.date }}</small>
+                                {% endif %}
+                            </span>
                         </div>
+
                         <strong>{{ item.price }}€</strong>
                     </label>
                     {% endfor %}
+
                 </div>
             </div>
 
@@ -141,6 +154,8 @@
     </section>
 
 </main>
+
+{% include 'home_button.html' ignore missing %}
 
 <script>
 function getCart() {

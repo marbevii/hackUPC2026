@@ -21,31 +21,49 @@
 
             <div class="cart-preview" id="cartPreview">
                 <h4>Cistella</h4>
+
                 <div id="cartItems">
                     <p>Encara no has afegit res.</p>
                 </div>
+
                 <strong id="cartTotal">Total: 0€</strong>
             </div>
         </div>
+
         <button type="button" class="icon-btn" title="Menu">☰</button>
     </div>
 </header>
 
 <main class="main-content">
+
     <section class="search-container">
 
         <div class="mode-buttons">
-            <button type="button" class="mode-btn active" data-mode="standard">
+
+            <button
+                type="button"
+                class="mode-btn active"
+                data-mode="standard"
+            >
                 Standard
             </button>
 
-            <button type="button" class="mode-btn" data-mode="mood">
+            <button
+                type="button"
+                class="mode-btn"
+                data-mode="mood"
+            >
                 Mood
             </button>
 
-            <button type="button" class="mode-btn" data-mode="budget">
+            <button
+                type="button"
+                class="mode-btn"
+                data-mode="budget"
+            >
                 Pressupost
             </button>
+
         </div>
 
         <form
@@ -72,7 +90,10 @@
                 ></textarea>
             </div>
 
-            <div id="imagePromptArea" class="hidden">
+            <div
+                id="imagePromptArea"
+                class="hidden"
+            >
 
                 <div
                     id="imagePreview"
@@ -80,13 +101,14 @@
                 ></div>
 
                 <label class="image-upload-box">
+
                     <span class="upload-icon">＋</span>
 
                     <p>Afegeix imatges del teu mood</p>
 
                     <small>
-                        Pots pujar fotos de paisatges, ciutats,
-                        cafès, platges...
+                        Pots pujar fotos de paisatges,
+                        ciutats, cafès, platges...
                     </small>
 
                     <input
@@ -96,11 +118,15 @@
                         multiple
                         accept="image/*"
                     >
+
                 </label>
 
             </div>
 
-            <button type="submit" class="submit-btn">
+            <button
+                type="submit"
+                class="submit-btn"
+            >
                 Buscar / Analitzar
             </button>
 
@@ -108,7 +134,9 @@
 
         <section class="explanation-box">
 
-            <h2 id="helpTitle">Mode Standard</h2>
+            <h2 id="helpTitle">
+                Mode Standard
+            </h2>
 
             <p id="helpText">
                 Escriu quin tipus de viatge vols fer.
@@ -117,9 +145,13 @@
                 i pressupost aproximat.
             </p>
 
-            <p id="helpExample" class="example">
-                Exemple: Vull marxar 5 dies des de Barcelona,
-                amb natura, bon menjar i vols barats.
+            <p
+                id="helpExample"
+                class="example"
+            >
+                Exemple: Vull marxar 5 dies
+                des de Barcelona, amb natura,
+                bon menjar i vols barats.
             </p>
 
         </section>
@@ -130,7 +162,10 @@
         ></section>
 
     </section>
+
 </main>
+
+{% include 'home_button.html' ignore missing %}
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
