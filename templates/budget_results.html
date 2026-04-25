@@ -58,7 +58,12 @@
                     {% for item in country.flights %}
                     <label class="option-row">
                         <input type="radio" name="flight-{{ country.city }}">
-                        <span>{{ item.name }}</span>
+                        <span>
+                            {{ item.name }}
+                            {% if item.date %}
+                                <small class="flight-date"> · {{ item.date }}</small>
+                            {% endif %}
+                        </span>
                         <strong>{{ item.price }}€</strong>
                     </label>
                     {% endfor %}

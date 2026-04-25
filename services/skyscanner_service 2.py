@@ -2,7 +2,6 @@ import os
 import time
 import requests
 from dotenv import load_dotenv
-from datetime import date
 
 load_dotenv()
 
@@ -13,7 +12,11 @@ POLL_URL = "https://partners.api.skyscanner.net/apiservices/v3/flights/live/sear
 
 
 def get_mock_flights(destination_iata):
-    return []
+    return [
+        {"name": f"No real flights parsed · {destination_iata}", "price": "-"},
+        {"name": "Check terminal Skyscanner response", "price": "-"},
+        {"name": "Fallback active", "price": "-"},
+    ]
 
 
 def search_flights(origin_iata, destination_iata, date, adults=1):
@@ -217,28 +220,3 @@ def parse_flights(data, origin_iata, destination_iata):
 
     print("PARSED FLIGHTS:", flights)
     return flights
-
-def search_flights_date_range(origin_iata, destination_iata, start_date, adults=1, days=7):
-    all_flights = []
-
-    year = start_date.get("year", 2026)
-    month = start_date.get("month", 6)
-    start_day = start_date.get("day", 1)
-
-    for day in range(start_day, start_day + days):
-        current_date = {
-            "year": year,
-            "month": month,
-            "day": day
-        }
-
-        flights = search_flights(origin_iata, destination_iata, current_date, adults)
-
-        for flight in flights:
-            if isinstance(flight.get("price"), (int, float)):
-                flight["date"] = f"{day}/{month}/{year}"
-                all_flights.append(flight)
-
-    all_flights = sorted(all_flights, key=lambda x: x["price"])
-
-    return all_flights[:3]

@@ -1,3 +1,5 @@
+# services/ai_service.py
+
 import os
 import json
 from dotenv import load_dotenv
@@ -15,44 +17,39 @@ def get_budget_destinations(user_prompt):
     client = genai.Client(api_key=GEMINI_API_KEY)
 
     prompt = f"""
-Ets un expert en recomanació de viatges.
+Ets un motor d'intenció de viatges.
 
-Interpreta EXACTAMENT el que demana l'usuari i proposa 3 ciutats que encaixin.
+Objectiu:
+Interpretar el prompt de l'usuari i retornar ciutats candidates per buscar vols amb Skyscanner.
 
 Regles:
-- Si diu "sense platja", NO proposis ciutats de platja.
-- Si diu "ciutat", prioritza ciutats urbanes.
-- Si diu "menys de X euros", prioritza opcions assequibles.
-- Si diu "cultura", prioritza museus, història, gastronomia i ambient urbà.
-- Si no diu origen, assumeix BCN.
-- Si no diu data, usa 15/6/2026.
 - Retorna NOMÉS JSON vàlid.
-- Retorna EXACTAMENT 3 destinacions.
-- Cada destinació ha de tenir city, country, iata i reason.
+- Extreu el pressupost numèric si existeix.
+- Si diu "fora d'Europa", NO proposis ciutats europees.
+- Si diu "sense platja", NO proposis destinacions de platja.
+- Si diu "ciutat", prioritza grans ciutats urbanes.
+- Si diu cultura, menjar, festa, natura, relax, etc., adapta les ciutats.
+- Si no diu origen, assumeix BCN.
+- Retorna entre 8 i 10 candidates, no només 3.
+- Si NO diu data, NO inventis cap data: posa "date_was_provided": false i "query_dates": null.
+- Si SÍ diu data, mes o període, posa "date_was_provided": true i omple "query_dates".
+- Cada ciutat necessita city, country, iata i reason.
+- Afegeix "date_was_provided": true només si l'usuari ha escrit una data, mes o període.
+- Si l'usuari NO escriu cap data, posa "date_was_provided": false i "query_dates": null.
 
 Format:
 {{
   "origin": "BCN",
-  "query_dates": {{"year": 2026, "month": 6, "day": 15}},
+  "budget": 1000,
+  "date_was_provided": false,
+    "query_dates": null,
   "adult_count": 1,
-  "destinations": [
+  "candidate_destinations": [
     {{
-      "city": "Madrid",
-      "country": "Spain",
-      "iata": "MAD",
-      "reason": "Ciutat urbana, sense platja, cultural i adequada pel pressupost."
-    }},
-    {{
-      "city": "Prague",
-      "country": "Czech Republic",
-      "iata": "PRG",
-      "reason": "Ciutat cultural, assequible, urbana i sense platja."
-    }},
-    {{
-      "city": "Vienna",
-      "country": "Austria",
-      "iata": "VIE",
-      "reason": "Ciutat urbana, cultural, sense platja i amb molt bona gastronomia."
+      "city": "Marrakech",
+      "country": "Morocco",
+      "iata": "RAK",
+      "reason": "Ciutat fora d'Europa, cultural, sense platja i assequible."
     }}
   ]
 }}
