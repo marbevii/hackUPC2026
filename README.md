@@ -173,3 +173,25 @@ We ask:
 - Session Storage  
 - Dynamic pricing logic  
 - Real-time UI updates  
+
+---
+
+# Installation
+
+## 1. Clone the repository
+```bash
+git clone <your-repository-url>
+cd travel-ai
+
+## 2. Install dependencies
+pip install -r requirements.txt
+
+## 3. Create a .env file
+GEMINI_API_KEY=your_api_key
+SKYSCANNER_API_KEY=your_api_key
+
+## 4. Run the project
+python app.py
+
+## 5. Open in browser
+http://127.0.0.1:5050
