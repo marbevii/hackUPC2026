@@ -164,7 +164,7 @@ def budget_results():
             "extras": get_mock_extras(country_index),
         })
 
-        if len(countries) == 5:
+        if len(countries) == 3:
             break
 
     return render_template(
