@@ -2,73 +2,129 @@
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
-    <title>Travel AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel AI - Mood Explorer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-    <header class="banner">
-        <div class="banner-left">
-            <div class="logo">LOGO</div>
-            <h1>Nom Web</h1>
+
+<header class="banner">
+    <div class="banner-left">
+        <div class="logo">LOGO</div>
+        <h1>Travel AI</h1>
+    </div>
+
+    <div class="banner-right">
+        <button type="button" class="icon-btn" title="Save">♡</button>
+        <button type="button" class="icon-btn" title="Carrito">🛒</button>
+        <button type="button" class="icon-btn" title="Login">👤</button>
+        <button type="button" class="icon-btn" title="Menu">☰</button>
+    </div>
+</header>
+
+<main class="main-content">
+    <section class="search-container">
+
+        <div class="mode-buttons">
+            <button type="button" class="mode-btn active" data-mode="standard">
+                Standard
+            </button>
+
+            <button type="button" class="mode-btn" data-mode="mood">
+                Mood
+            </button>
+
+            <button type="button" class="mode-btn" data-mode="budget">
+                Pressupost
+            </button>
         </div>
 
-        <div class="banner-right">
-            <button class="icon-btn" title="Save">♡</button>
-            <button class="icon-btn" title="Carrito">🛒</button>
-            <button class="icon-btn" title="Login">👤</button>
-            <button class="icon-btn" title="Menu">☰</button>
-        </div>
-    </header>
+        <form
+            id="searchForm"
+            class="prompt-box"
+            action="/search"
+            method="POST"
+            enctype="multipart/form-data"
+            target="_blank"
+        >
 
-    <main class="main-content">
-        <section class="search-container">
+            <input
+                type="hidden"
+                name="mode"
+                id="modeInput"
+                value="standard"
+            >
 
-            <div class="mode-buttons">
-                <button class="mode-btn active" data-mode="standard">Standard</button>
-                <button class="mode-btn" data-mode="mood">Mood</button>
-                <button class="mode-btn" data-mode="budget">Pressupost</button>
+            <div id="textPromptArea">
+                <textarea
+                    name="prompt"
+                    id="promptInput"
+                    placeholder="Escriu aquí el teu prompt..."
+                ></textarea>
             </div>
 
-            <form id="searchForm" class="prompt-box">
-                <input type="hidden" name="mode" id="modeInput" value="standard">
+            <div id="imagePromptArea" class="hidden">
 
-                <div id="textPromptArea">
-                    <textarea
-                        name="prompt"
-                        id="promptInput"
-                        placeholder="Escriu aquí el teu prompt..."
-                    ></textarea>
-                </div>
+                <div
+                    id="imagePreview"
+                    class="image-preview-container"
+                ></div>
 
-                <div id="imagePromptArea" class="hidden">
-                    <label class="image-upload-box">
-                        <span class="upload-icon">＋</span>
-                        <p>Afegeix imatges del teu mood</p>
-                        <small>Pots pujar fotos de paisatges, ciutats, cafès, platges...</small>
-                        <input type="file" name="images" id="imageInput" multiple accept="image/*">
-                    </label>
-                </div>
+                <label class="image-upload-box">
+                    <span class="upload-icon">＋</span>
 
-                <button type="submit" class="submit-btn">Buscar / Analitzar</button>
-            </form>
+                    <p>Afegeix imatges del teu mood</p>
 
-            <section class="explanation-box">
-                <h2 id="helpTitle">Mode Standard</h2>
-                <p id="helpText">
-                    Escriu quin tipus de viatge vols fer. Pots indicar origen, dates, durada,
-                    estil de viatge, clima, activitats i pressupost aproximat.
-                </p>
-                <p id="helpExample" class="example">
-                    Exemple: Vull marxar 5 dies des de Barcelona, amb natura, bon menjar i vols barats.
-                </p>
-            </section>
+                    <small>
+                        Pots pujar fotos de paisatges, ciutats,
+                        cafès, platges...
+                    </small>
 
-            <section id="responseBox" class="response-box hidden"></section>
+                    <input
+                        type="file"
+                        id="imageInput"
+                        name="images"
+                        multiple
+                        accept="image/*"
+                    >
+                </label>
+
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Buscar / Analitzar
+            </button>
+
+        </form>
+
+        <section class="explanation-box">
+
+            <h2 id="helpTitle">Mode Standard</h2>
+
+            <p id="helpText">
+                Escriu quin tipus de viatge vols fer.
+                Pots indicar origen, dates, durada,
+                estil de viatge, clima, activitats
+                i pressupost aproximat.
+            </p>
+
+            <p id="helpExample" class="example">
+                Exemple: Vull marxar 5 dies des de Barcelona,
+                amb natura, bon menjar i vols barats.
+            </p>
 
         </section>
-    </main>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+        <section
+            id="responseBox"
+            class="response-box hidden"
+        ></section>
+
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>

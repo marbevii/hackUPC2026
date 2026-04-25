@@ -1,8 +1,9 @@
+# services/skyscanner_service.py
+
 import os
 import time
 import requests
 from dotenv import load_dotenv
-from datetime import date
 
 load_dotenv()
 
@@ -64,8 +65,6 @@ def search_flights(origin_iata, destination_iata, date, adults=1):
         create_response.raise_for_status()
 
         create_data = create_response.json()
-        print("CREATE KEYS:", create_data.keys())
-
         session_token = create_data.get("sessionToken")
 
         if not session_token:
@@ -89,16 +88,10 @@ def search_flights(origin_iata, destination_iata, date, adults=1):
 
             poll_data = poll_response.json()
 
-            status = poll_data.get("status")
-            action = poll_data.get("action")
+            print("POLL STATUS FIELD:", poll_data.get("status"))
+            print("POLL ACTION FIELD:", poll_data.get("action"))
 
-            print("POLL STATUS FIELD:", status)
-            print("POLL ACTION FIELD:", action)
-
-            results = poll_data.get("content", {}).get("results", {})
-            print("RESULT KEYS:", results.keys())
-
-            flights = parse_flights(poll_data, origin_iata, destination_iata)
+            flights = parse_flights(poll_data)
 
             if flights:
                 return flights
@@ -111,6 +104,32 @@ def search_flights(origin_iata, destination_iata, date, adults=1):
     except Exception as e:
         print("Skyscanner error:", e)
         return get_mock_flights(destination_iata)
+
+
+def search_flights_date_range(origin_iata, destination_iata, start_date, adults=1, days=7):
+    all_flights = []
+
+    year = start_date.get("year", 2026)
+    month = start_date.get("month", 6)
+    start_day = start_date.get("day", 1)
+
+    for day in range(start_day, start_day + days):
+        current_date = {
+            "year": year,
+            "month": month,
+            "day": day
+        }
+
+        flights = search_flights(origin_iata, destination_iata, current_date, adults)
+
+        for flight in flights:
+            if isinstance(flight.get("price"), (int, float)):
+                flight["date"] = f"{day}/{month}/{year}"
+                all_flights.append(flight)
+
+    all_flights = sorted(all_flights, key=lambda x: x["price"])
+
+    return all_flights[:3]
 
 
 def clean_price(raw_price):
@@ -136,6 +155,7 @@ def parse_time(value):
     if isinstance(value, dict):
         hour = value.get("hour")
         minute = value.get("minute")
+
         if hour is not None and minute is not None:
             return f"{int(hour):02d}:{int(minute):02d}"
 
@@ -145,7 +165,7 @@ def parse_time(value):
     return ""
 
 
-def parse_flights(data, origin_iata, destination_iata):
+def parse_flights(data):
     results = data.get("content", {}).get("results", {})
 
     itineraries = results.get("itineraries", {})
@@ -157,7 +177,7 @@ def parse_flights(data, origin_iata, destination_iata):
 
     flights = []
 
-    for itinerary_id, itinerary in itineraries.items():
+    for itinerary in itineraries.values():
         pricing_options = itinerary.get("pricingOptions", [])
 
         if not pricing_options:
@@ -209,6 +229,7 @@ def parse_flights(data, origin_iata, destination_iata):
 
         flights.append({
             "name": label,
+            "airline": airline_name,
             "price": price
         })
 
@@ -217,28 +238,3 @@ def parse_flights(data, origin_iata, destination_iata):
 
     print("PARSED FLIGHTS:", flights)
     return flights
-
-def search_flights_date_range(origin_iata, destination_iata, start_date, adults=1, days=7):
-    all_flights = []
-
-    year = start_date.get("year", 2026)
-    month = start_date.get("month", 6)
-    start_day = start_date.get("day", 1)
-
-    for day in range(start_day, start_day + days):
-        current_date = {
-            "year": year,
-            "month": month,
-            "day": day
-        }
-
-        flights = search_flights(origin_iata, destination_iata, current_date, adults)
-
-        for flight in flights:
-            if isinstance(flight.get("price"), (int, float)):
-                flight["date"] = f"{day}/{month}/{year}"
-                all_flights.append(flight)
-
-    all_flights = sorted(all_flights, key=lambda x: x["price"])
-
-    return all_flights[:3]

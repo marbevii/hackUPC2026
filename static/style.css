@@ -9,7 +9,10 @@ body {
     color: #111827;
 }
 
-/* Banner fix */
+/* =========================
+   HEADER
+========================= */
+
 .banner {
     position: fixed;
     top: 0;
@@ -45,8 +48,8 @@ body {
 }
 
 .banner-left h1 {
-    font-size: 24px;
     margin: 0;
+    font-size: 24px;
 }
 
 .banner-right {
@@ -63,13 +66,17 @@ body {
     background: white;
     font-size: 22px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .icon-btn:hover {
     background: #eeeeee;
 }
 
-/* Contingut principal */
+/* =========================
+   HOME
+========================= */
+
 .main-content {
     padding-top: 130px;
     min-height: 100vh;
@@ -83,7 +90,8 @@ body {
     padding: 24px;
 }
 
-/* Botons mode */
+/* Modes */
+
 .mode-buttons {
     display: flex;
     justify-content: center;
@@ -99,6 +107,11 @@ body {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.mode-btn:hover {
+    background: #e8e8e8;
 }
 
 .mode-btn.active {
@@ -107,15 +120,12 @@ body {
     border-color: #111827;
 }
 
-.mode-btn:hover {
-    background: #e8e8e8;
-}
-
 .mode-btn.active:hover {
     background: #111827;
 }
 
-/* Caixa prompt */
+/* Prompt */
+
 .prompt-box {
     background: white;
     border: 1px solid #d7d7d7;
@@ -139,7 +149,10 @@ textarea:focus {
     border-color: #111827;
 }
 
-/* Mood upload */
+/* =========================
+   MOOD IMAGE UPLOAD
+========================= */
+
 .image-upload-box {
     display: block;
     width: 100%;
@@ -149,6 +162,7 @@ textarea:focus {
     text-align: center;
     cursor: pointer;
     background: #fafafa;
+    transition: 0.2s;
 }
 
 .image-upload-box:hover {
@@ -175,7 +189,52 @@ textarea:focus {
     margin-top: 18px;
 }
 
-/* Submit */
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.img-preview {
+    position: relative;
+    width: 82px;
+    height: 82px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.img-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-preview button {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border: none;
+    border-radius: 50%;
+    background: #ff3b30;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.img-preview button:hover {
+    transform: scale(1.08);
+}
+
+/* =========================
+   BUTTON
+========================= */
+
 .submit-btn {
     width: 100%;
     margin-top: 22px;
@@ -187,13 +246,17 @@ textarea:focus {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .submit-btn:hover {
     background: #252f3f;
 }
 
-/* Explicació */
+/* =========================
+   INFO BOX
+========================= */
+
 .explanation-box {
     margin-top: 30px;
     background: white;
@@ -217,7 +280,6 @@ textarea:focus {
     color: #6b7280;
 }
 
-/* Resposta temporal */
 .response-box {
     margin-top: 24px;
     padding: 22px;
@@ -226,23 +288,20 @@ textarea:focus {
     border-radius: 20px;
 }
 
-/* Utilitats */
-.hidden {
-    display: none;
-}
+/* =========================
+   RESULTS PAGE
+========================= */
 
-/* Layout de resultats */
 .results-page {
-    overflow: hidden; /* Evita scroll doble */
+    overflow: hidden;
 }
 
 .results-container {
     display: flex;
-    padding-top: 85px; /* Alçada del banner */
+    padding-top: 85px;
     height: 100vh;
 }
 
-/* Chat lateral (1/3) */
 .chat-sidebar {
     width: 33.33%;
     border-right: 1px solid #d7d7d7;
@@ -264,10 +323,14 @@ textarea:focus {
     border-radius: 10px;
 }
 
-.user-message { background: #f0f7ff; }
-.ai-message { background: #f4f5f7; }
+.user-message {
+    background: #f0f7ff;
+}
 
-/* Display de vols (2/3) */
+.ai-message {
+    background: #f4f5f7;
+}
+
 .flights-display {
     width: 66.66%;
     padding: 20px;
@@ -305,4 +368,43 @@ textarea:focus {
     cursor: pointer;
 }
 
-.view-more-btn:hover { background: #f4f5f7; }
+.view-more-btn:hover {
+    background: #f4f5f7;
+}
+
+/* =========================
+   HELPERS
+========================= */
+
+.hidden {
+    display: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+    .banner {
+        padding: 0 16px;
+    }
+
+    .banner-left h1 {
+        font-size: 18px;
+    }
+
+    .mode-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .results-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .chat-sidebar,
+    .flights-display {
+        width: 100%;
+    }
+}
