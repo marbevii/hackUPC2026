@@ -71,6 +71,15 @@ function updateMode(mode) {
 searchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    const currentMode = modeInput.value;
+
+    if (currentMode === "budget") {
+        searchForm.action = "/budget-results";
+        searchForm.method = "POST";
+        searchForm.submit();
+        return;
+    }
+
     const formData = new FormData(searchForm);
 
     const response = await fetch("/search", {
