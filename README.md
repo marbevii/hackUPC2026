@@ -178,20 +178,19 @@ We ask:
 
 # Installation
 
-1. Clone the repository
-```bash
+## 1. Clone the repository
     git clone <your-repository-url>
     cd travel-ai
 
-1. Clone the repository
+## 2. Install dependencies
     pip install -r requirements.txt
 
-3. Create a .env file
+## 3. Create a .env file
     GEMINI_API_KEY=your_api_key
     SKYSCANNER_API_KEY=your_api_key
 
-4. Run the project
+## 4. Run the project
     python app.py
 
-5. Open in browser
+## 5. Open in browser
     http://127.0.0.1:5050
