@@ -30,6 +30,12 @@
 
         <div class="prompt-box-top">
             <p>{{ prompt }}</p>
+
+            <small class="prompt-date">
+                📅 Sortida estimada:
+                {{ travel_date.day }}/{{ travel_date.month }}/{{ travel_date.year }}
+            </small>
+
             <a href="/" class="edit-button">✏️</a>
         </div>
     </section>
