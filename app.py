@@ -109,7 +109,7 @@ def budget_results():
             ],
         })
 
-        if len(countries) == 3:
+        if len(countries) == 5:
             break
 
     return render_template(
