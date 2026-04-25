@@ -76,9 +76,18 @@
     </div>
 
     <div class="banner-right">
-        <button class="icon-btn">♡</button>
-        <button class="icon-btn">🛒</button>
-        <button class="icon-btn">👤</button>
+    <div class="cart-wrapper">
+        <button type="button" class="icon-btn cart-btn">🛒</button>
+
+        <div class="cart-preview" id="cartPreview">
+            <h4>Cistella</h4>
+            <div id="cartItems">
+                <p>Encara no has afegit res.</p>
+            </div>
+                <strong id="cartTotal">Total: 0€</strong>
+            </div>
+        </div>
+
         <button class="icon-btn">☰</button>
     </div>
 </header>
@@ -88,6 +97,7 @@
     <section class="countries-grid">
 
         {% for country in countries %}
+        {% set country_index = loop.index0 %}
         <article class="country-card">
 
             <div class="country-header">
@@ -102,7 +112,11 @@
                     {% for item in country.flights %}
                     <label class="option-row">
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <input type="radio" name="flight-{{ country.city }}" {% if loop.first %}checked{% endif %}>
+                            <input type="radio"
+                                name="flight-{{ country_index }}"
+                                data-country="{{ country_index }}"
+                                data-price="{{ item.price }}"
+                                {% if loop.first %}checked{% endif %}>                            
                             <span>{{ item.airline if item.airline else item.name }}</span>
                         </div>
                         <strong>{{ item.price }}€</strong>
@@ -111,8 +125,14 @@
                 </div>
             </div>
 
-            <button class="combo-btn">
-                Triar millor combinació
+            <button
+                type="button"
+                class="combo-btn add-to-cart-btn"
+                data-country="{{ country_index }}"
+                data-city="{{ country.city }}"
+                data-country-name="{{ country.country }}"
+            >
+                Add to basket !
             </button>
 
         </article>
@@ -121,6 +141,105 @@
     </section>
 
 </main>
+
+<script>
+function getCart() {
+    return JSON.parse(sessionStorage.getItem("travelCart")) || [];
+}
+
+function saveCart(cart) {
+    sessionStorage.setItem("travelCart", JSON.stringify(cart));
+}
+
+function renderCart() {
+    const cart = getCart();
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if (!cartItems || !cartTotal) return;
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = "<p>Encara no has afegit res.</p>";
+        cartTotal.textContent = "Total: 0€";
+        return;
+    }
+
+    let total = 0;
+
+    cartItems.innerHTML = cart.map(trip => {
+        total += trip.total;
+
+        return `
+            <div class="cart-item">
+                <strong>${trip.city}, ${trip.country}</strong>
+                <ul>
+                    ${trip.items.map(item => `
+                        <li>${item.name} — ${item.price}€</li>
+                    `).join("")}
+                </ul>
+                <p><strong>${trip.total}€</strong></p>
+            </div>
+        `;
+    }).join("");
+
+    cartTotal.textContent = "Total: " + total + "€";
+}
+
+function getSelectedFlight(countryId) {
+    const input = document.querySelector(
+        'input[data-country="' + countryId + '"]:checked'
+    );
+
+    if (!input) {
+        return null;
+    }
+
+    const row = input.closest(".option-row");
+    const name = row.querySelector("span").innerText.trim();
+    const price = Number(input.dataset.price);
+
+    return {
+        items: [
+            {
+                name: name,
+                price: price
+            }
+        ],
+        total: price
+    };
+}
+
+document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+    button.addEventListener("click", function() {
+        const countryId = this.dataset.country;
+        const city = this.dataset.city;
+        const country = this.dataset.countryName;
+
+        const selection = getSelectedFlight(countryId);
+
+        if (!selection) {
+            alert("Selecciona un vol abans d’afegir-ho al carret.");
+            return;
+        }
+
+        const cart = getCart();
+
+        cart.push({
+            city: city,
+            country: country,
+            items: selection.items,
+            total: selection.total
+        });
+
+        saveCart(cart);
+        renderCart();
+
+        alert("Vol afegit al carret!");
+    });
+});
+
+renderCart();
+</script>
 
 </body>
 </html>

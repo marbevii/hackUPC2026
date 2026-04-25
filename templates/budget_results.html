@@ -16,9 +16,17 @@
     </div>
 
     <div class="banner-right">
-        <button class="icon-btn">♡</button>
-        <button class="icon-btn">🛒</button>
-        <button class="icon-btn">👤</button>
+        <div class="cart-wrapper">
+            <button type="button" class="icon-btn cart-btn">🛒</button>
+
+            <div class="cart-preview" id="cartPreview">
+                <h4>Cistella</h4>
+                <div id="cartItems">
+                    <p>Encara no has afegit res.</p>
+                </div>
+                <strong id="cartTotal">Total: 0€</strong>
+            </div>
+        </div>
         <button class="icon-btn">☰</button>
     </div>
 </header>
@@ -143,8 +151,13 @@
                 Total: <span id="total-{{ country_index }}">0</span>€
             </div>
 
-            <button class="combo-btn">
-                Triar millor combinació
+            <button
+                class="combo-btn add-to-cart-btn"
+                data-country="{{ country_index }}"
+                data-city="{{ country.city }}"
+                data-country-name="{{ country.country }}"
+            >
+                Add to basket !
             </button>
 
         </article>
@@ -169,11 +182,108 @@ function updateTotal(countryId) {
     document.getElementById("total-" + countryId).textContent = total;
 }
 
+function getSelectedOptions(countryId) {
+    const selected = document.querySelectorAll(
+        'input[data-country="' + countryId + '"]:checked'
+    );
+
+    const items = [];
+    let total = 0;
+
+    selected.forEach(input => {
+        const row = input.closest(".option-row");
+        const name = row.querySelector("span").innerText.trim();
+        const price = Number(input.dataset.price);
+
+        items.push({
+            name: name,
+            price: price
+        });
+
+        total += price;
+    });
+
+    return { items, total };
+}
+
+function getCart() {
+    return JSON.parse(sessionStorage.getItem("travelCart")) || [];
+}
+
+function saveCart(cart) {
+    sessionStorage.setItem("travelCart", JSON.stringify(cart));
+}
+
+function renderCart() {
+    const cart = getCart();
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if (!cartItems || !cartTotal) return;
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = "<p>Encara no has afegit res.</p>";
+        cartTotal.textContent = "Total: 0€";
+        return;
+    }
+
+    let total = 0;
+
+    cartItems.innerHTML = cart.map(trip => {
+    total += trip.total;
+
+        return `
+            <div class="cart-item">
+                <strong>${trip.city}, ${trip.country}</strong>
+                <ul>
+                    ${trip.items.map(item => `
+                        <li>${item.name} — ${item.price}€</li>
+                    `).join("")}
+                </ul>
+                <p><strong>${trip.total}€</strong></p>
+            </div>
+        `;
+    }).join("");
+
+    cartTotal.textContent = "Total: " + total + "€";
+}
+
 document.querySelectorAll("input[data-country]").forEach(input => {
     input.addEventListener("change", function() {
         updateTotal(this.dataset.country);
     });
 });
+
+document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+    button.addEventListener("click", function() {
+        const countryId = this.dataset.country;
+        const city = this.dataset.city;
+        const country = this.dataset.countryName;
+
+        const selection = getSelectedOptions(countryId);
+
+        if (selection.items.length === 0) {
+            alert("Selecciona com a mínim una opció abans d'afegir-ho al carret.");
+            return;
+        }
+
+        const cart = getCart();
+
+        cart.push({
+            city: city,
+            country: country,
+            items: selection.items,
+            total: selection.total
+        });
+
+        saveCart(cart);
+        renderCart();
+
+        alert("Combinació afegida al carret!");
+    });
+});
+
+renderCart();
 </script>
 
 </body>
