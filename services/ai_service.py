@@ -59,7 +59,7 @@ Prompt usuari:
 """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemma-4-31b-it",
         contents=prompt
     )
 

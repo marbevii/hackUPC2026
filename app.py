@@ -5,6 +5,71 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+def get_mock_hotels(index):
+    options = [
+        [
+            {"name": "Urban Nest Rooms", "price": 45, "address": "Central Avenue"},
+            {"name": "Old Quarter Stay", "price": 75, "address": "Market Street"},
+            {"name": "Skyline Boutique House", "price": 105, "address": "North Bridge Road"},
+        ],
+        [
+            {"name": "River Corner Lodge", "price": 48, "address": "Riverside Walk"},
+            {"name": "City Gate Hotel", "price": 82, "address": "Station Boulevard"},
+            {"name": "Garden View Residence", "price": 112, "address": "Green Park Lane"},
+        ],
+        [
+            {"name": "Metro Budget Inn", "price": 41, "address": "Main Square"},
+            {"name": "Heritage Comfort Suites", "price": 78, "address": "Old Town Road"},
+            {"name": "Panorama Design Rooms", "price": 118, "address": "Hilltop Avenue"},
+        ],
+    ]
+
+    return options[index % len(options)]
+
+
+def get_mock_restaurants(index):
+    options = [
+        [
+            {"name": "Corner Market Bites", "price": 14, "address": "Food Market Lane"},
+            {"name": "Local Table House", "price": 27, "address": "Old Centre Street"},
+            {"name": "Evening Kitchen", "price": 39, "address": "Riverside Avenue"},
+        ],
+        [
+            {"name": "Street Bowl Spot", "price": 12, "address": "South Market"},
+            {"name": "Neighbourhood Grill", "price": 24, "address": "Liberty Street"},
+            {"name": "Terrace Dinner Club", "price": 41, "address": "Upper District"},
+        ],
+        [
+            {"name": "Daily Plate Café", "price": 15, "address": "Museum Road"},
+            {"name": "Central Bistro", "price": 29, "address": "Main Boulevard"},
+            {"name": "Night Garden Restaurant", "price": 44, "address": "Garden Walk"},
+        ],
+    ]
+
+    return options[index % len(options)]
+
+
+def get_mock_extras(index):
+    options = [
+        [
+            {"name": "Historic Church Visit", "price": 10, "address": "Cathedral Square"},
+            {"name": "Old City Guided Walk", "price": 35, "address": "Main Square"},
+            {"name": "Mountain View Day Trip", "price": 60, "address": "Central Station"},
+        ],
+        [
+            {"name": "Main Basilica Visit", "price": 12, "address": "Heritage Avenue"},
+            {"name": "Cultural District Tour", "price": 32, "address": "Museum Quarter"},
+            {"name": "Countryside Excursion", "price": 58, "address": "North Terminal"},
+        ],
+        [
+            {"name": "Ancient Temple Visit", "price": 8, "address": "Old Town Gate"},
+            {"name": "Local Guide City Tour", "price": 29, "address": "City Hall"},
+            {"name": "Lake Region Day Trip", "price": 67, "address": "East Station"},
+        ],
+    ]
+
+    return options[index % len(options)]
+
 
 @app.route("/")
 def home():
@@ -66,6 +131,8 @@ def budget_results():
     countries = []
 
     for destination in candidates:
+        country_index = len(countries)
+
         flights = search_flights_date_range(
             origin,
             destination["iata"],
@@ -92,21 +159,9 @@ def budget_results():
             "city": destination["city"],
             "reason": destination["reason"],
             "flights": valid_flights,
-            "hotels": [
-                {"name": "Hostel", "price": 35},
-                {"name": "Hotel 3★", "price": 70},
-                {"name": "Apartment", "price": 95},
-            ],
-            "food": [
-                {"name": "Low budget", "price": 18},
-                {"name": "Local food", "price": 32},
-                {"name": "Foodie plan", "price": 55},
-            ],
-            "extras": [
-                {"name": "Transport públic", "price": 20},
-                {"name": "Museus / activitats", "price": 25},
-                {"name": "Excursió", "price": 45},
-            ],
+            "hotels": get_mock_hotels(country_index),
+            "food": get_mock_restaurants(country_index),
+            "extras": get_mock_extras(country_index),
         })
 
         if len(countries) == 5:
