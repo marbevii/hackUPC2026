@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultats Pressupost</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='budget.css') }}">
+</head>
+
+<body>
+
+<header class="banner">
+    <div class="banner-left">
+        <div class="logo">LOGO</div>
+        <h1>Nom Web</h1>
+    </div>
+
+    <div class="banner-right">
+        <button class="icon-btn">♡</button>
+        <button class="icon-btn">🛒</button>
+        <button class="icon-btn">👤</button>
+        <button class="icon-btn">☰</button>
+    </div>
+</header>
+
+<main class="budget-page">
+
+    <section class="prompt-section">
+        <h2>El teu prompt</h2>
+
+        <div class="prompt-box-top">
+            <p>{{ prompt }}</p>
+
+            <small class="prompt-date">
+                📅 Sortida estimada:
+                {{ travel_date.day }}/{{ travel_date.month }}/{{ travel_date.year }}
+            </small>
+
+            <a href="/" class="edit-button">✏️</a>
+        </div>
+    </section>
+
+    <section class="countries-grid">
+
+        {% for country in countries %}
+        <article class="country-card">
+
+            <div class="country-header">
+                <h2>{{ country.city }}</h2>
+                <p class="subtitle">{{ country.country }}</p>
+                <p class="reason">{{ country.reason }}</p>
+            </div>
+
+            <div class="country-options-grid">
+
+                <div class="section-block">
+                    <h3>✈️ Vols</h3>
+                    {% for item in country.flights %}
+                    <label class="option-row">
+                        <input type="radio" name="flight-{{ country.city }}">
+                        <span>{{ item.name }}</span>
+                        <strong>{{ item.price }}€</strong>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div class="section-block">
+                    <h3>🏨 Allotjament</h3>
+                    {% for item in country.hotels %}
+                    <label class="option-row">
+                        <input type="radio" name="hotel-{{ country.city }}">
+                        <span>{{ item.name }}</span>
+                        <strong>{{ item.price }}€/nit</strong>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div class="section-block">
+                    <h3>🍽️ Menjar</h3>
+                    {% for item in country.food %}
+                    <label class="option-row">
+                        <input type="radio" name="food-{{ country.city }}">
+                        <span>{{ item.name }}</span>
+                        <strong>{{ item.price }}€/dia</strong>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div class="section-block">
+                    <h3>🎟️ Extres</h3>
+                    {% for item in country.extras %}
+                    <label class="option-row">
+                        <input type="checkbox">
+                        <span>{{ item.name }}</span>
+                        <strong>{{ item.price }}€</strong>
+                    </label>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <button class="combo-btn">
+                Triar millor combinació
+            </button>
+
+        </article>
+        {% endfor %}
+
+    </section>
+
+</main>
+
+</body>
+</html>

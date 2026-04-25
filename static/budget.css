@@ -1,0 +1,173 @@
+.budget-page {
+    padding-top: 125px;
+    background: #f4f5f7;
+    min-height: 100vh;
+}
+
+/* PROMPT SUPERIOR */
+
+.prompt-section {
+    max-width: 1300px;
+    margin: auto;
+    padding: 0 24px;
+}
+
+.prompt-box-top {
+    position: relative;
+    background: white;
+    border-radius: 22px;
+    border: 1px solid #ddd;
+    padding: 24px 70px 24px 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.prompt-box-top p {
+    margin: 0;
+    font-size: 18px;
+}
+
+.edit-button {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #111827;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CONTENIDOR PAÏSOS */
+
+.countries-grid {
+    max-width: 1500px;
+    margin: 30px auto;
+    padding: 0 24px 60px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+/* CARD PAÍS */
+
+.country-card {
+    background: white;
+    border-radius: 24px;
+    border: 1px solid #ddd;
+    padding: 28px;
+    box-shadow: 0 5px 14px rgba(0,0,0,0.06);
+}
+
+/* CAPÇALERA: Lisbon + Portugal + descripció */
+
+.country-header {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 28px;
+}
+
+.country-header h2 {
+    margin: 0;
+    font-size: 34px;
+}
+
+.subtitle {
+    margin: 0;
+    color: #6b7280;
+    font-size: 18px;
+}
+
+.reason {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.4;
+}
+
+/* 4 COLUMNES */
+
+.country-options-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.section-block {
+    margin-top: 0;
+}
+
+.section-block h3 {
+    margin-bottom: 10px;
+}
+
+/* OPCIONS */
+
+.option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.option-row:hover {
+    background: #eef2f7;
+}
+
+.option-row span {
+    flex: 1;
+}
+
+.option-row strong {
+    white-space: nowrap;
+}
+
+/* BOTÓ */
+
+.combo-btn {
+    width: 260px;
+    margin-top: 26px;
+    border: none;
+    border-radius: 16px;
+    padding: 15px;
+    background: #111827;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.combo-btn:hover {
+    background: #1f2937;
+}
+
+.prompt-date {
+    display: block;
+    margin-top: 10px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .country-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .country-options-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .combo-btn {
+        width: 100%;
+    }
+}
