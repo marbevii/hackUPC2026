@@ -219,3 +219,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderCart();
 });
+
+// Function to Open/Close Menu
+function toggleMenu() {
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('overlay');
+    
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
+
+    // Prevent scrolling when menu is open
+    if (menu.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// LOADING SCREEN LOGIC (New independent block)
+document.getElementById('searchForm').addEventListener('submit', function() {
+    // Mostramos la pantalla de carga justo cuando se hace el envío
+    document.getElementById('loading-screen').style.display = 'flex';
+});
