@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +11,10 @@
 
 <header class="banner">
     <div class="banner-left">
-        <div class="logo">LOGO</div>
-        <h1>Travel AI</h1>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.webp') }}" alt="SkyPlan Logo">
+        </div>
+        <h1>SkyPlan<span class="brand-mark">™</span></h1>
     </div>
 
     <div class="banner-right">
@@ -362,6 +363,9 @@ renderCart();
 
 {% include 'home_button.html' ignore missing %}
 
+<footer class="site-footer">
+    © 2026 SkyPlan™ · Built at HackUPC
+</footer>
 </body>
 </html>
 ```

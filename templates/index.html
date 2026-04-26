@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel AI - Mood Explorer</title>
+    <title>SkyPlan - Mood Explorer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -11,8 +11,10 @@
 
 <header class="banner">
     <div class="banner-left">
-        <div class="logo">LOGO</div>
-        <h1>Travel AI</h1>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.webp') }}" alt="SkyPlan Logo">
+        </div>
+        <h1>SkyPlan<span class="brand-mark">™</span></h1>
     </div>
 
     <div class="banner-right">
@@ -93,7 +95,7 @@
             </div>
 
             <button type="submit" class="submit-btn">
-                Search / Analyse
+                Find My Trip
             </button>
         </form>
 
@@ -118,9 +120,10 @@
 
 </main>
 
-{% include 'home_button.html' ignore missing %}
-
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
+<footer class="site-footer">
+    © 2026 SkyPlan™ · Built at HackUPC
+</footer>
 </body>
 </html>

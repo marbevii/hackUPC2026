@@ -1,4 +1,4 @@
-# Travel AI  
+# SkyPlan 
 ### HackUPC 2026 · 10th Anniversary Edition  
 ### Challenge by Skyscanner: *Be the Future of Travel*
 
@@ -6,13 +6,13 @@
 
 ## Overview
 
-Travel AI is an intelligent trip discovery platform built during **HackUPC 2026** for the **Skyscanner Challenge**.
+SkyPlan is an intelligent trip discovery platform built during **HackUPC 2026** for the **Skyscanner Challenge**.
 
 The challenge invited participants to rethink how people discover and book travel in a world full of endless options, growing complexity, and decision fatigue.
 
 Our solution uses **Artificial Intelligence + Real Flight Data** to understand what travellers truly want, then transforms vague intentions into clear, personalized and bookable travel options.
 
-Instead of forcing users to manually compare dozens of tabs, websites and filters, Travel AI creates a smarter and more intuitive travel planning experience.
+Instead of forcing users to manually compare dozens of tabs, websites and filters, SkyPlan creates a smarter and more intuitive travel planning experience.
 
 ---
 
@@ -39,7 +39,7 @@ Skyscanner asked us to create a next-generation AI-powered travel experience tha
 
 # Our Solution
 
-## Travel AI reimagines travel search with 3 intelligent modes:
+## SkyPlan reimagines travel search with 3 intelligent modes:
 
 ---
 
@@ -69,7 +69,7 @@ Examples:
 - Night city lights  
 - Tropical places  
 
-Travel AI analyses the visual mood and suggests destinations that match the style and feeling the user wants.
+SkyPlan analyses the visual mood and suggests destinations that match the style and feeling the user wants.
 
 This allows people to search by emotion and aesthetics, not only keywords.
 
@@ -83,7 +83,7 @@ Example:
 
 > “I have €700 total for flights, hotel and food.”
 
-Travel AI builds complete travel packages including:
+SkyPlan builds complete travel packages including:
 
 - Flights  
 - Accommodation  
@@ -138,7 +138,7 @@ But many travellers begin with:
 - A vibe  
 - A need for escape  
 
-Travel AI bridges that gap.
+SkyPlan bridges that gap.
 
 Instead of asking:
 
