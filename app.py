@@ -167,24 +167,42 @@ def home():
 @app.route("/search", methods=["POST"])
 def search():
     mode = request.form.get("mode", "standard")
-
+    
+    # 1. Configuración por cada modo
     if mode == "mood":
         images = request.files.getlist("images")
         ai_data = get_destination_from_mood(images)
         prompt_used = "Visual mood analysis"
         template_to_use = "budget_results_mood.html"
         use_date_range = False
-    else:
+        
+    elif mode == "budget":
         prompt = request.form.get("prompt", "")
         ai_data = get_budget_destinations(prompt)
         prompt_used = prompt
-        template_to_use = "budget_results.html"
+        template_to_use = "budget_results.html" # Página para presupuesto
+        use_date_range = True
+        
+    else: # Por defecto entra aquí si es "standard"
+        prompt = request.form.get("prompt", "")
+        ai_data = get_budget_destinations(prompt)
+        prompt_used = prompt
+        template_to_use = "results.html" # Página estándar
         use_date_range = True
 
     print("AI DATA:", ai_data)
 
     travel_date = normalize_travel_date(ai_data)
-    budget = ai_data.get("budget", 999999)
+    
+    raw_budget = ai_data.get("budget")
+    if raw_budget is None:
+        budget = 999999.0
+    else:
+        try:
+            budget = float(raw_budget)
+        except (TypeError, ValueError):
+            budget = 999999.0
+
     origin = ai_data.get("origin", "BCN")
     adults = ai_data.get("adult_count", 1)
     candidates = ai_data.get("candidate_destinations", ai_data.get("destinations", []))

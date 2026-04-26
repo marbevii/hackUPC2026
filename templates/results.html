@@ -2,8 +2,137 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Results - SkyPlan</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* Extra styles for the results page. These work together with static/style.css */
+        :root {
+            --border-color: #ddd;
+            --bg-card: #ffffff;
+            --bg-page: #fcfcfc;
+            --text-main: #333;
+            --text-muted: #666;
+        }
+
+        .results-container {
+            display: flex;
+            width: 100%;
+            gap: 24px;
+            padding: 20px;
+            font-family: sans-serif;
+            background-color: var(--bg-page);
+            box-sizing: border-box;
+        }
+
+        .chat-sidebar {
+            flex: 0 0 320px;
+        }
+
+        .flights-display {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            min-width: 0;
+        }
+
+        .country-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .country-section h2 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .flights-list {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .flight-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-card);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .flight-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .flight-airline {
+            font-weight: bold;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .flight-time {
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .flight-price {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #000;
+            text-align: right;
+        }
+
+        .view-more-container {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .view-more-btn {
+            background: none;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .view-more-btn:hover {
+            background-color: var(--text-main);
+            color: #fff;
+        }
+
+        .extra-flights {
+            display: none;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .results-container {
+                flex-direction: column;
+            }
+
+            .chat-sidebar {
+                flex: 1 1 auto;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body class="results-page">
@@ -17,9 +146,8 @@
     </div>
 
     <div class="banner-right">
-        <button type="button" class="icon-btn">🛒</button>
-        <button type="button" class="icon-btn">☰</button> <button type="button" class="icon-btn" onclick="toggleMenu()">☰</button>
-
+        <button type="button" class="icon-btn" aria-label="Cart">🛒</button>
+        <button type="button" class="icon-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
     </div>
 </header>
 
@@ -44,43 +172,136 @@
 
         <div class="chat-input-area">
             <textarea placeholder="Continue the conversation..."></textarea>
-            <button class="submit-btn">Send</button>
+            <button type="button" class="submit-btn">Send</button>
         </div>
     </aside>
 
     <section class="flights-display">
 
         <div class="country-section">
-            <h2>Destination 1</h2>
+            <h2>LISBON (Portugal)</h2>
 
             <div class="flights-list">
-                <div class="flight-card">Flight 1: €120 - Direct</div>
-                <div class="flight-card">Flight 2: €145 - 1 stop</div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">easyJet</div>
+                    <div class="flight-time">17:45 - 18:50</div>
+                    <div class="flight-price">77€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Vueling</div>
+                    <div class="flight-time">17:20 - 18:25</div>
+                    <div class="flight-price">71€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">30/04/2026</div>
+                    <div class="flight-airline">Vueling</div>
+                    <div class="flight-time">12:10 - 13:20</div>
+                    <div class="flight-price">110€</div>
+                </div>
             </div>
 
-            <button class="view-more-btn">View more flights</button>
+            <div id="extra-lisbon" class="flights-list extra-flights">
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Vueling</div>
+                    <div class="flight-time">19:25 - 20:35</div>
+                    <div class="flight-price">73€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Vueling</div>
+                    <div class="flight-time">20:20 - 21:30</div>
+                    <div class="flight-price">75€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">30/04/2026</div>
+                    <div class="flight-airline">Vueling</div>
+                    <div class="flight-time">12:10 - 13:20</div>
+                    <div class="flight-price">88€</div>
+                </div>
+            </div>
+
+            <div class="view-more-container">
+                <button type="button" class="view-more-btn" onclick="toggleMore('extra-lisbon', this)">View more</button>
+            </div>
         </div>
 
         <div class="country-section">
-            <h2>Destination 2</h2>
+            <h2>ROME (Italy)</h2>
 
             <div class="flights-list">
-                <div class="flight-card">Flight 1: €90 - Direct</div>
-                <div class="flight-card">Flight 2: €110 - Direct</div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Wizz Air</div>
+                    <div class="flight-time">21:45 - 23:40</div>
+                    <div class="flight-price">42€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Ryanair</div>
+                    <div class="flight-time">22:55 - 00:50+1</div>
+                    <div class="flight-price">51€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Wizz Air</div>
+                    <div class="flight-time">10:00 - 11:55</div>
+                    <div class="flight-price">77€</div>
+                </div>
             </div>
 
-            <button class="view-more-btn">View more flights</button>
+            <div id="extra-rome" class="flights-list extra-flights">
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Ryanair</div>
+                    <div class="flight-time">18:00 - 19:55</div>
+                    <div class="flight-price">98€</div>
+                </div>
+            </div>
+
+            <div class="view-more-container">
+                <button type="button" class="view-more-btn" onclick="toggleMore('extra-rome', this)">View more</button>
+            </div>
         </div>
 
         <div class="country-section">
-            <h2>Destination 3</h2>
+            <h2>PARIS (France)</h2>
 
             <div class="flights-list">
-                <div class="flight-card">Flight 1: €45 - Direct</div>
-                <div class="flight-card">Flight 2: €60 - Direct</div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Vueling</div>
+                    <div class="flight-time">07:00 - 08:45</div>
+                    <div class="flight-price">45€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Transavia</div>
+                    <div class="flight-time">14:20 - 16:10</div>
+                    <div class="flight-price">60€</div>
+                </div>
+                <div class="flight-card">
+                    <div class="flight-date">01/05/2026</div>
+                    <div class="flight-airline">Air France</div>
+                    <div class="flight-time">18:30 - 20:20</div>
+                    <div class="flight-price">85€</div>
+                </div>
             </div>
 
-            <button class="view-more-btn">View more flights</button>
+            <div id="extra-paris" class="flights-list extra-flights">
+                <div class="flight-card">
+                    <div class="flight-date">02/05/2026</div>
+                    <div class="flight-airline">easyJet</div>
+                    <div class="flight-time">10:00 - 11:45</div>
+                    <div class="flight-price">55€</div>
+                </div>
+            </div>
+
+            <div class="view-more-container">
+                <button type="button" class="view-more-btn" onclick="toggleMore('extra-paris', this)">View more</button>
+            </div>
         </div>
 
     </section>
@@ -90,28 +311,39 @@
 <footer class="site-footer">
     © 2026 SkyPlan™ · Built at HackUPC
 </footer>
+
 <div id="side-menu" class="side-menu">
     <div class="menu-header">
-        <button class="close-btn" onclick="toggleMenu()">×</button>
+        <button type="button" class="close-btn" aria-label="Close menu" onclick="toggleMenu()">×</button>
     </div>
     <nav class="menu-content">
         <a href="/" class="menu-item"><span class="icon">🏠</span> <span class="text">Home</span></a>
         <a href="#profile" class="menu-item"><span class="icon">👤</span> <span class="text">My Profile</span></a>
     </nav>
-
 </div>
+
 <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
 <script>
-// Añadimos la lógica de apertura/cierre que falta en este archivo
-function toggleMenu() {
-    const menu = document.getElementById('side-menu');
-    const overlay = document.getElementById('overlay');
-    if(menu && overlay) {
-        menu.classList.toggle('active');
-        overlay.classList.toggle('active');
+    function toggleMenu() {
+        const menu = document.getElementById('side-menu');
+        const overlay = document.getElementById('overlay');
+
+        if (menu && overlay) {
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
     }
-}
+
+    function toggleMore(id, button) {
+        const extra = document.getElementById(id);
+
+        if (!extra || !button) return;
+
+        const isVisible = extra.style.display === 'flex';
+        extra.style.display = isVisible ? 'none' : 'flex';
+        button.innerText = isVisible ? 'View more' : 'View less';
+    }
 </script>
 
 </body>
