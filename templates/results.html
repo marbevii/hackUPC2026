@@ -18,7 +18,8 @@
 
     <div class="banner-right">
         <button type="button" class="icon-btn">🛒</button>
-        <button type="button" class="icon-btn">☰</button>
+        <button type="button" class="icon-btn">☰</button> <button type="button" class="icon-btn" onclick="toggleMenu()">☰</button>
+
     </div>
 </header>
 
@@ -89,5 +90,29 @@
 <footer class="site-footer">
     © 2026 SkyPlan™ · Built at HackUPC
 </footer>
+<div id="side-menu" class="side-menu">
+    <div class="menu-header">
+        <button class="close-btn" onclick="toggleMenu()">×</button>
+    </div>
+    <nav class="menu-content">
+        <a href="/" class="menu-item"><span class="icon">🏠</span> <span class="text">Home</span></a>
+        <a href="#profile" class="menu-item"><span class="icon">👤</span> <span class="text">My Profile</span></a>
+    </nav>
+
+</div>
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+<script>
+// Añadimos la lógica de apertura/cierre que falta en este archivo
+function toggleMenu() {
+    const menu = document.getElementById('side-menu');
+    const overlay = document.getElementById('overlay');
+    if(menu && overlay) {
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+}
+</script>
+
 </body>
 </html>
